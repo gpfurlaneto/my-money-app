@@ -1,8 +1,45 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
-module.exports = mongoose.connect('mongodb://localhost/mymoney')
+const Sequelize = require('sequelize')
+const path = require('path')
+const fs = require('fs')
 
-mongoose.Error.messages.general.required = "O atributo '{PATH}' é obrigatório."
-mongoose.Error.messages.Number.min = "O '{VALUE}' informado é menor que o limite mínimo de '{MIN}'."
-mongoose.Error.messages.Number.max = "O '{VALUE}' informado é maior que o limite máximo de '{MAX}'."
-mongoose.Error.messages.String.enum = "'{VALUE}' não é válido para o atributo '{PATH}'."
+let database = null
+
+const loadModules = (sequelize) => {
+    const dir = path.join(__dirname, '../api/models')
+    let models = []
+    fs.readdirSync(dir).forEach(file => {
+        const modelDir = path.join(dir, file)
+        const model = sequelize.import(modelDir)
+        models[model.name] = model
+    })
+    return models
+}
+
+module.exports = () => {
+    
+    if(!database) {
+        const sequelize = new Sequelize('postgres://postgres:@:5432/postgres')
+        sequelize.authenticate()
+            .then(() => {
+            console.log('Connection has been established successfully.');
+            })
+            .catch(err => {
+            console.error('Unable to connect to the database:', err);
+            });
+
+        database = {
+            sequelize,
+            Sequelize,
+            models: {}
+        }
+
+        database.models = loadModules(sequelize)
+
+        sequelize.sync().done(() => {
+            return database
+        })
+
+    }
+
+    return database
+}
