@@ -1,7 +1,26 @@
 
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+var apiHost;
+var oapiHost;
 
+var setupApi = function(){
+    if(process.env.NODE_ENV === 'production'){
+        if(!(process.env.server)){
+            throw 'server is required'
+        }
+        if(!(process.env.port)){
+            throw 'port is required'
+        }
+        apiHost = `http://${process.env.server}:${process.env.port}/api`
+        oapiHost = `http://${process.env.server}:${process.env.port}/oapi`
+    }else{
+        apiHost = 'http://localhost:3003/api'
+        oapiHost = 'http://localhost:3003/oapi'
+    }   
+}
+
+setupApi()
 
 module.exports = {
     entry: './src/index.jsx',
@@ -27,7 +46,11 @@ module.exports = {
             jQuery:  'jquery',
             'window.jQuery' : 'jquery'
         }),
-        new ExtractTextPlugin('app.css')
+        new ExtractTextPlugin('app.css'),
+        new webpack.DefinePlugin({
+            __API__: JSON.stringify(apiHost),
+            __OAPI__: JSON.stringify(oapiHost),
+          }),
     ],
     module: {
         loaders: [{
