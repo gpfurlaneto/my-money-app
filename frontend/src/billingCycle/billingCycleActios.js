@@ -30,7 +30,7 @@ function submit(values, method){
         const id = values._id ? values._id : ''
         axios[method](`${__API__}/billingCycles/${id}`, values)
         .then(resp => {
-            toastr.success('Sucesso', 'Operação realizada com sucesso')
+            toastr.success('Success', 'Successful operation')
             dispatch(init())
         })
         .catch(e => {

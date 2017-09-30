@@ -22,11 +22,11 @@ class Dashboard extends Component {
                 <Content>
                     <Row>
                         <ValueBox cols='12 4' color='green' icon='bank'
-                            value={`R$ ${credit}`} text='Total de créditos' />
+                            value={`R$ ${credit}`} text='Total of credits' />
                         <ValueBox cols='12 4' color='red' icon='credit-card'
-                            value={`R$ ${debt}`} text='Total de débitos' />
+                            value={`R$ ${debt}`} text='Total of debts' />
                         <ValueBox cols='12 4' color='blue' icon='money'
-                            value={`R$ ${credit - debt}`} text='Valor consolidadeo' />
+                            value={`R$ ${credit - debt}`} text='Consolidated value' />
                     </Row>
                 </Content>
             </div>

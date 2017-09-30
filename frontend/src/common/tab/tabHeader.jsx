@@ -17,7 +17,7 @@ class TabHeader extends Component {
                         onClick={() => this.props.selectTab(this.props.target)}
                         data-target={this.props.tatget}>
                         <i className={`fa fa-${this.props.icon}`}></i>
-                        {this.props.label}
+                        {' ' + this.props.label}
                     </a>
                 </li>
             </If>
